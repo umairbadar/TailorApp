@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:weightSum="3"
+    android:orientation="vertical">
+
+    <!--Slider Section Starts-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="2dp">
+
+        <ViewFlipper
+            android:id="@+id/viewFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/main_app_bar"
+            android:id="@+id/toolbar_MainMenu"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_arrivals"
+            android:textSize="24sp"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/white"
+            android:typeface="monospace"/>
+
+    </FrameLayout>
+    <!--Slider Section Ends-->
+
+    <!--Men Section starts-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="2dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/men_style"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/men_s_tailoring"
+            android:textColor="@color/textColor"
+            android:textSize="24sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:typeface="monospace"/>
+
+        <Button
+            android:id="@+id/btn_men_styles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trending Styles"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/roundedbutton"
+            android:textColor="@color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:typeface="monospace"
+            android:onClick="onClick"/>
+
+
+    </FrameLayout>
+    <!--Men Section Ends-->
+
+    <!--Women Sections Starts-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="2dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/women_style"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/women_s_tailoring"
+            android:textColor="@color/textColor"
+            android:textSize="24sp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:typeface="monospace"/>
+
+        <Button
+            android:id="@+id/btn_women_styles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trending Styles"
+            android:layout_gravity="center"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/roundedbutton"
+            android:textColor="@color/white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:typeface="monospace"
+            android:onClick="onClick"/>
+
+    </FrameLayout>
+    <!--Women Section Ends-->
+
+</LinearLayout>
