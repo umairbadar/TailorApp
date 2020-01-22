@@ -15,8 +15,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
-
     private RelativeLayout splashLayout;
 
     @Override
@@ -33,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void loadSplash() {
 
+        int SPLASH_DISPLAY_LENGTH = 3000;
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -54,4 +53,3 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 }
-
