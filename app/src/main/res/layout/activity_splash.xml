@@ -5,16 +5,15 @@
     android:id="@+id/splash_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity">
+    tools:context=".SplashActivity"
+    android:background="@color/white">
 
-    <TextView
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
+        android:src="@drawable/splash"
         android:padding="10dp"
-        android:text="Tailor App"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp" />
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
