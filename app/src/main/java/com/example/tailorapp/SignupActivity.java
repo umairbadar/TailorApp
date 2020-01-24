@@ -3,7 +3,9 @@ package com.example.tailorapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,11 +16,26 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.tailorapp.contants.Api;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText et_name, et_email, et_address, et_phone, et_password, et_cpassword;
+    private ProgressDialog progressDialog;
 
     private Spinner spn_gender;
     private ArrayList<String> gender_list;
@@ -39,6 +56,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initViews(){
 
+
+        progressDialog = new ProgressDialog(this);
+
         et_name = findViewById(R.id.et_name);
         et_email = findViewById(R.id.et_email);
         et_address = findViewById(R.id.et_address);
@@ -54,6 +74,63 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, gender_list);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spn_gender.setAdapter(genderAdapter);
+    }
+
+    private void registerUser(){
+
+        progressDialog.setTitle("Registering User");
+        progressDialog.setMessage("Please wait while we create your account");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, Api.SignupURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean status = jsonObject.getBoolean("success");
+                            if (status){
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(), "Please Login to continue",
+                                        Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                finish();
+                            } else {
+
+                                progressDialog.hide();
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("name", et_name.getText().toString());
+                map.put("email", et_email.getText().toString());
+                map.put("phone", et_phone.getText().toString());
+                map.put("address", et_address.getText().toString());
+                map.put("gender", spn_gender.getSelectedItem().toString());
+                map.put("password", et_password.getText().toString());
+                return map;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        requestQueue.add(req);
     }
 
     private void validation(){
@@ -91,8 +168,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(getApplicationContext(), "Password not match",
                     Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(getApplicationContext(), "DONE",
-                    Toast.LENGTH_LONG).show();
+            registerUser();
         }
     }
 

@@ -46,17 +46,19 @@
         android:layout_marginBottom="2dp">
 
         <ImageView
+            android:id="@+id/img_men"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/men_style"
+            android:src="@drawable/placeholder_image"
             android:scaleType="fitXY" />
 
         <TextView
+            android:id="@+id/tv_men"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/men_s_tailoring"
-            android:textColor="@color/textColor"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -88,17 +90,19 @@
         android:layout_marginBottom="2dp">
 
         <ImageView
+            android:id="@+id/img_women"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/women_style"
+            android:src="@drawable/placeholder_image"
             android:scaleType="fitXY"/>
 
         <TextView
+            android:id="@+id/tv_women"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/women_s_tailoring"
-            android:textColor="@color/textColor"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"

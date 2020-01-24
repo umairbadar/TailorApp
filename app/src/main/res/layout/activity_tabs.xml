@@ -5,31 +5,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".womens.WomensActivity">
+    tools:context=".tabLayout.TabsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/womens_appBarLayout">
+        android:id="@+id/mens_appBarLayout">
 
         <include
-            android:id="@+id/toolbar_womens"
+            android:id="@+id/toolbar_mens"
             layout="@layout/app_bar_layout"/>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/womens_tabs"
+            android:id="@+id/mens_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorHeight="4dp"
+            app:tabSelectedTextColor="@color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/womens_tabPager"
+        android:id="@+id/mens_tabPager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/womens_appBarLayout">
+        android:layout_below="@+id/mens_appBarLayout">
 
     </androidx.viewpager.widget.ViewPager>
 

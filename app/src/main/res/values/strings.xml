@@ -4,18 +4,32 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="don_t_have_an_account_create_one">Don\'t have an Account? Create One.</string>
-    <string name="name">Name</string>
     <string name="address">Address</string>
     <string name="phone">Phone</string>
     <string name="create_account">Create Account</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="men_s_tailoring">Men Tailoring</string>
-    <string name="women_s_tailoring">Women Tailoring</string>
+    <string name="men_s_tailoring">Men</string>
+    <string name="women_s_tailoring">Women</string>
     <string name="new_arrivals">New Arrivals</string>
     <string name="logout">Logout</string>
     <string name="no_internet_msg">Opppss!!\nIt seems that you haven\'t connected to the Internet.</string>
     <string name="cart">Cart</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_cart">Empty Cart</string>
+    <string name="empty_cart_desc">Looks like you haven\'t made\nyour choice yet</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="available_options">Available Options</string>
+    <string name="upload_a_style_instead">Upload A Style Instead</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="fabric_details">Fabric Details</string>
+    <string name="i_have_fabric">I have fabric</string>
+    <string name="i_don_t_have_fabric">I don\'t have fabric</string>
+    <string name="measurements">Measurements</string>
+    <string name="send_the_tailor_to_my_home_for_taking_measurements">Send the tailor to my home for taking measurements</string>
+    <string name="use_my_existing_fit_garment">Use my existing fit garment</string>
+    <string name="pickup_date">Pickup Date</string>
+    <string name="pickup_time">Pickup Time</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>

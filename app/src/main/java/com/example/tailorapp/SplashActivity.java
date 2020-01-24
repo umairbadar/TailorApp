@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,11 +17,14 @@ import com.google.android.material.snackbar.Snackbar;
 public class SplashActivity extends AppCompatActivity {
 
     private RelativeLayout splashLayout;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        sharedPreferences = getSharedPreferences("MyPre", MODE_PRIVATE);
 
         splashLayout = findViewById(R.id.splash_layout);
 
@@ -32,14 +36,33 @@ public class SplashActivity extends AppCompatActivity {
     private void loadSplash() {
 
         int SPLASH_DISPLAY_LENGTH = 3000;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(mainIntent);
-                finish();
-            }
-        }, SPLASH_DISPLAY_LENGTH);
+
+        boolean savelogin = sharedPreferences.getBoolean("savelogin", false);
+
+        if (savelogin){
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                }
+            }, SPLASH_DISPLAY_LENGTH);
+
+        } else {
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                }
+            }, SPLASH_DISPLAY_LENGTH);
+
+        }
+
     }
 
     private void isNetworkAvailable() {
