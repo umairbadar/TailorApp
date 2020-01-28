@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.tailorapp.cart.DbBitmapUtility;
 import com.example.tailorapp.database.DatabaseHelper;
 import com.example.tailorapp.tabLayout.TabsActivity;
 import com.squareup.picasso.Picasso;
@@ -47,6 +49,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private static final int REQUEST_WRITE_PERMISSION = 786;
     private final int CODE_GALLERY_REQUEST = 999;
     private Bitmap bitmap = null;
+    private int img_req = 0;
+    private boolean insertData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +94,25 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         radioGrpMeasurements = findViewById(R.id.radioGrpMeasurements);
     }
 
-    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime){
+    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status){
 
         progressDialog.setTitle("Updating Cart");
         progressDialog.setMessage("Please wait while we are updating your cart.");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        boolean insertData = databaseHelper.addData(id, name, price, image, fabric_details, measurements, pickupDate, pickupTime);
+            Bitmap bitmap = ((BitmapDrawable)product_img.getDrawable()).getBitmap();
+            insertData = databaseHelper.addData(
+                    id,
+                    name,
+                    price,
+                    DbBitmapUtility.getBytes(bitmap),
+                    fabric_details,
+                    measurements,
+                    pickupDate,
+                    pickupTime,
+                    image_status
+            );
 
         if (insertData){
 
@@ -234,7 +249,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             String pickupDate = tv_date.getText().toString();
             String pickupTime = tv_time.getText().toString();
 
-            AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime);
+            if (img_req == 1){
+                AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true");
+            } else {
+                AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false");
+            }
         }
     }
 
@@ -252,6 +271,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.btn_image_upload:
+                img_req = 1;
                 requestPermission();
                 break;
 

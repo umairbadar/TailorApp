@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.R;
 import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 import com.example.tailorapp.tabLayout.category.Adapter_Category;
 import com.example.tailorapp.tabLayout.category.Model_Category;
 
@@ -124,8 +125,7 @@ public class TabsFragment extends Fragment {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
 
     }
 

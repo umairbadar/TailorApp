@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.cart.CartActivity;
 import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 import com.example.tailorapp.database.DatabaseHelper;
 import com.example.tailorapp.tabLayout.TabsActivity;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -147,8 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
 
     }
 

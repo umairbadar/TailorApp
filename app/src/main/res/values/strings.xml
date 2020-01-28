@@ -27,9 +27,14 @@
     <string name="i_have_fabric">I have fabric</string>
     <string name="i_don_t_have_fabric">I don\'t have fabric</string>
     <string name="measurements">Measurements</string>
-    <string name="send_the_tailor_to_my_home_for_taking_measurements">Send the tailor to my home for taking measurements</string>
-    <string name="use_my_existing_fit_garment">Use my existing fit garment</string>
+    <string name="send_the_tailor_to_my_home_for_taking_measurements">Send the technician to my home for taking measurements  *Only in Bangalore</string>
+    <string name="use_my_existing_fit_garment">Use my existing fit garment  *Our logistics service provider will collect the same</string>
     <string name="pickup_date">Pickup Date</string>
     <string name="pickup_time">Pickup Time</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="place_order">Place Order</string>
+    <string name="shipping_methods">Shipping Methods</string>
+    <string name="payment_methods">Payment Methods</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="confirm_order">Confirm Order</string>
 </resources>

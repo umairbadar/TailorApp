@@ -1,13 +1,11 @@
 package com.example.tailorapp.cart;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,10 +51,9 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
         holder.tv_pickup_date.setText(item.getPickupDate());
         holder.tv_pickup_time.setText(item.getPickupTime());
 
-        Picasso
-                .get()
-                .load(item.getImage())
-                .into(holder.img);
+        Bitmap bitmap = DbBitmapUtility.getImage(item.getImage());
+
+        holder.img.setImageBitmap(bitmap);
 
         holder.img_delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,8 +63,10 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
 
                 if (list.size() == 0){
                     CartActivity.emptyCartLayout.setVisibility(View.VISIBLE);
+                    CartActivity.btn_place_order.setVisibility(View.INVISIBLE);
                 } else {
                     CartActivity.emptyCartLayout.setVisibility(View.INVISIBLE);
+                    CartActivity.btn_place_order.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -79,7 +78,7 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
         databaseHelper.deleteItem(id);
         list.remove(position);
         notifyDataSetChanged();
-        Toast.makeText(context, "Item Deleted!",
+        Toast.makeText(context, "Product removed from Cart",
                 Toast.LENGTH_LONG).show();
     }
 

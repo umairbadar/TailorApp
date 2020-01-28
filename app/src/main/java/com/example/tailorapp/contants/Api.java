@@ -9,4 +9,5 @@ public class Api {
     public static String CategoriesURL = BaseURL + "categories&key=ssred1";
     public static String CategoryListURL = BaseURL + "products&key=ssred1";
     public static String ProductDetailURL = BaseURL + "product_detail&key=ssred1";
+    public static String ShippingMethodsURL = BaseURL + "shipping_methods&key=ssred1";
 }

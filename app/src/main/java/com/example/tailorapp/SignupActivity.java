@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -129,8 +130,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void validation(){

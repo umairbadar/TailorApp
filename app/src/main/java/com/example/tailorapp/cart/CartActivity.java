@@ -3,18 +3,32 @@ package com.example.tailorapp.cart;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.R;
+import com.example.tailorapp.contants.Api;
 import com.example.tailorapp.database.DatabaseHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +41,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     private DatabaseHelper databaseHelper;
     public static LinearLayout emptyCartLayout;
+    public static Button btn_place_order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +61,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         databaseHelper = new DatabaseHelper(this);
         emptyCartLayout = findViewById(R.id.emptyCartLayout);
+        btn_place_order = findViewById(R.id.btn_place_order);
 
         cartList = findViewById(R.id.cartList);
         cartList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -55,12 +71,12 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         getCartList();
     }
 
-    private int getCount(){
+    private int getCount() {
 
         Cursor cursor = databaseHelper.getCount();
 
         int count = -1;
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             count = cursor.getInt(0);
         }
         return count;
@@ -71,6 +87,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         if (getCount() > 0) {
 
             emptyCartLayout.setVisibility(View.INVISIBLE);
+            btn_place_order.setVisibility(View.VISIBLE);
             Cursor data = databaseHelper.getData();
             while (data.moveToNext()) {
 
@@ -78,7 +95,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         data.getString(0),
                         data.getString(1),
                         data.getString(2),
-                        data.getString(3),
+                        data.getBlob(3),
                         data.getString(4),
                         data.getString(5),
                         data.getString(6),
@@ -92,11 +109,18 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         } else {
 
             emptyCartLayout.setVisibility(View.VISIBLE);
+            btn_place_order.setVisibility(View.INVISIBLE);
         }
     }
 
     @Override
     public void onClick(View view) {
+
+        if (view.getId() == R.id.btn_place_order) {
+
+            Intent placeOrderIntent = new Intent(getApplicationContext(), PlaceOrderActivity.class);
+            startActivity(placeOrderIntent);
+        }
 
     }
 }

@@ -18,6 +18,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL6 = "Measurements";
     private static final String COL7 = "Pickup_date";
     private static final String COL8 = "Pickup_time";
+    private static final String COL9 = "image_status";
+
 
     public DatabaseHelper(Context context){
         super(context, TABLE_NAME, null,1);
@@ -28,8 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL1 + " TEXT, " + COL2
-                + " TEXT, " + COL3 + " TEXT, " + COL4 + " TEXT, "  + COL5 + " TEXT, " + COL6 + " TEXT, "
-                + COL7 + " TEXT, " + COL8 + " TEXT)";
+                + " TEXT, " + COL3 + " TEXT, " + COL4 + " BLOB, "  + COL5 + " TEXT, " + COL6 + " TEXT, "
+                + COL7 + " TEXT, " + COL8 + " TEXT, " + COL9 + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -39,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime){
+    public boolean addData(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, id);
@@ -50,6 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL6, measurements);
         contentValues.put(COL7, pickupDate);
         contentValues.put(COL8, pickupTime);
+        contentValues.put(COL9, image_status);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -58,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
+
     }
 
     public Cursor getData(){

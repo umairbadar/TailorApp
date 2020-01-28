@@ -5,8 +5,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,8 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ProductActivity"/>
+        tools:ignore="GoogleAppIndexingWarning"
+        android:name=".contants.AppController">
+        <activity android:name=".cart.PlaceOrderActivity"
+            android:parentActivityName=".cart.CartActivity"/>
+        <activity android:name=".ProductActivity" />
         <activity
             android:name=".cart.CartActivity"
             android:parentActivityName=".MainActivity" />

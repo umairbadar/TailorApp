@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.R;
 import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
@@ -140,8 +141,7 @@ public class TabsActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
 
     }
 }

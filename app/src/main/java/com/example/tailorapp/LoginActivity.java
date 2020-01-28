@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 editor.putString("gender", data.getString("gender"));
                                 editor.putString("email", data.getString("email"));
                                 editor.putString("phone", data.getString("telephone"));
+                                editor.putString("token", data.getString("api_token"));
                                 editor.putString("address", address.getString("address_1"));
                                 editor.putBoolean("savelogin", true);
                                 editor.apply();
@@ -103,7 +105,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                             } else {
-
                                 progressDialog.hide();
                                 Toast.makeText(getApplicationContext(), jsonObject.getString("error"),
                                         Toast.LENGTH_LONG).show();
@@ -130,8 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private void validation(){
