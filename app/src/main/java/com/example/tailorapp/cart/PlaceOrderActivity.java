@@ -92,6 +92,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                                     JSONObject innerObj = jsonArray.getJSONObject(i);
 
                                     rbArray[i].setText(innerObj.getString("title"));
+                                    rbArray[i].setTag(innerObj.getString("code"));
                                     rbArray[i].setId(i);
                                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
                                     radioGrpShippingMethods.addView(rbArray[i], params);
@@ -140,7 +141,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         try {
             jsonObj.put("user_id", sharedPreferences.getString("id", ""));
             jsonObj.put("token", sharedPreferences.getString("token", ""));
-            jsonObj.put("shipping_method", radioButton.getText().toString());
+            jsonObj.put("shipping_method", radioButton.getTag().toString());
 
             JSONArray jsonArray = new JSONArray();
             Cursor data = databaseHelper.getData();
@@ -163,7 +164,6 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         } else {
                             jsonObject.put("image", "false");
                         }
-
                         //Log.e("image", "data:image/jpeg;base64," + image);
                         jsonObject.put("fabric", data.getString(4));
                         jsonObject.put("measurement", data.getString(5));
@@ -200,6 +200,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     public void onResponse(String response) {
 
                         Log.e("response", response);
+                        //databaseHelper.delete();
+                        //Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -208,7 +210,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         Toast.makeText(getApplicationContext(), error.getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<String, String>();
@@ -233,8 +235,8 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     Toast.LENGTH_LONG).show();
         } else {
 
-            //Log.e("Data", getAllProducts().toString());
-            sendData();
+            Log.e("Data", getAllProducts().toString());
+            //sendData();
         }
     }
 
