@@ -5,4 +5,5 @@
     <color name="colorAccent">#2C3039</color>
     <color name="buttonbg">#C62C3039</color>
     <color name="white">#FFFFFF</color>
+    <color name="pendingStatus">#029C54</color>
 </resources>

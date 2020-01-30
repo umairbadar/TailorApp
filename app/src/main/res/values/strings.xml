@@ -40,4 +40,9 @@
     <string name="sub_total">Sub Total</string>
     <string name="total">Total</string>
     <string name="order_history">Order History</string>
+    <string name="customer_s_name">Customer\'s Name</string>
+    <string name="date">Date</string>
+    <string name="total_products">Total Products</string>
+    <string name="status">Status</string>
+    <string name="order_id">Order ID</string>
 </resources>

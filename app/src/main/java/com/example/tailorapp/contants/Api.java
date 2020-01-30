@@ -10,4 +10,5 @@ public class Api {
     public static String CategoryListURL = BaseURL + "products&key=ssred1";
     public static String ProductDetailURL = BaseURL + "product_detail&key=ssred1";
     public static String ShippingMethodsURL = BaseURL + "shipping_methods&key=ssred1";
+    public static String OrderHistoryURL = BaseURL + "order_history&key=ssred1";
 }

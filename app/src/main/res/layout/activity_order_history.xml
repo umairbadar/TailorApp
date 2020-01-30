@@ -11,4 +11,10 @@
         android:id="@+id/toolbar_orderHistory"
         layout="@layout/app_bar_layout"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderHistoryList"
+        android:layout_below="@+id/toolbar_orderHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>
