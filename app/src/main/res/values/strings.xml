@@ -37,4 +37,7 @@
     <string name="payment_methods">Payment Methods</string>
     <string name="cash_on_delivery">Cash On Delivery</string>
     <string name="confirm_order">Confirm Order</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="total">Total</string>
+    <string name="order_history">Order History</string>
 </resources>

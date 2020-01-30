@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,7 +42,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
     private DatabaseHelper databaseHelper;
     public static LinearLayout emptyCartLayout;
-    public static Button btn_place_order;
+    public static LinearLayout subTotalLayout;
+    public static TextView tv_subTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,9 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
 
         databaseHelper = new DatabaseHelper(this);
         emptyCartLayout = findViewById(R.id.emptyCartLayout);
-        btn_place_order = findViewById(R.id.btn_place_order);
+        subTotalLayout = findViewById(R.id.subTotalLayout);
+        tv_subTotal = findViewById(R.id.tv_subTotal);
+        tv_subTotal.setText(String.valueOf(databaseHelper.sum()));
 
         cartList = findViewById(R.id.cartList);
         cartList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -87,7 +91,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         if (getCount() > 0) {
 
             emptyCartLayout.setVisibility(View.INVISIBLE);
-            btn_place_order.setVisibility(View.VISIBLE);
+            subTotalLayout.setVisibility(View.VISIBLE);
             Cursor data = databaseHelper.getData();
             while (data.moveToNext()) {
 
@@ -99,7 +103,8 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
                         data.getString(4),
                         data.getString(5),
                         data.getString(6),
-                        data.getString(7)
+                        data.getString(7),
+                        data.getInt(9)
                 );
 
                 list.add(item);
@@ -109,7 +114,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         } else {
 
             emptyCartLayout.setVisibility(View.VISIBLE);
-            btn_place_order.setVisibility(View.INVISIBLE);
+            subTotalLayout.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -119,6 +124,7 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
         if (view.getId() == R.id.btn_place_order) {
 
             Intent placeOrderIntent = new Intent(getApplicationContext(), PlaceOrderActivity.class);
+            placeOrderIntent.putExtra("sub_total", tv_subTotal.getText().toString());
             startActivity(placeOrderIntent);
         }
 

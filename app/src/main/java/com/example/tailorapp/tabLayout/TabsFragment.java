@@ -88,12 +88,14 @@ public class TabsFragment extends Fragment {
                                     String name = innerObj.getString("name");
                                     String price = innerObj.getString("pirce");
                                     String image = innerObj.getString("thumb");
+                                    int amount = innerObj.getInt("amount");
 
                                     Model_Category item = new Model_Category(
                                             id,
                                             name,
                                             price,
-                                            image
+                                            image,
+                                            amount
                                     );
 
                                     list.add(item);

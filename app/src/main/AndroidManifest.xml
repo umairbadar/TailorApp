@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".contants.AppController"
         android:allowBackup="false"
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
@@ -16,10 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning"
-        android:name=".contants.AppController">
-        <activity android:name=".cart.PlaceOrderActivity"
-            android:parentActivityName=".cart.CartActivity"/>
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".order.OrderHistoryActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity
+            android:name=".cart.PlaceOrderActivity"
+            android:parentActivityName=".cart.CartActivity" />
         <activity android:name=".ProductActivity" />
         <activity
             android:name=".cart.CartActivity"

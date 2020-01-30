@@ -10,9 +10,9 @@ public class Model_Cart {
     private String measurements;
     private String pickupDate;
     private String pickupTime;
+    private int amount;
 
-
-    public Model_Cart(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime) {
+    public Model_Cart(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, int amount) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -21,6 +21,7 @@ public class Model_Cart {
         this.measurements = measurements;
         this.pickupDate = pickupDate;
         this.pickupTime = pickupTime;
+        this.amount = amount;
     }
 
     public String getFabric_details() {
@@ -47,11 +48,15 @@ public class Model_Cart {
         return name;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
     public String getPrice() {
         return price;
     }
 
-    public byte[] getImage() {
-        return image;
+    public int getAmount() {
+        return amount;
     }
 }

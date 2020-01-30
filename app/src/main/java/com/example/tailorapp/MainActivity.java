@@ -26,6 +26,7 @@ import com.example.tailorapp.cart.CartActivity;
 import com.example.tailorapp.contants.Api;
 import com.example.tailorapp.contants.AppController;
 import com.example.tailorapp.database.DatabaseHelper;
+import com.example.tailorapp.order.OrderHistoryActivity;
 import com.example.tailorapp.tabLayout.TabsActivity;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
@@ -121,12 +122,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         .get()
                                         .load(menObj.getString("image"))
                                         .placeholder(R.drawable.placeholder_image)
+                                        .fit().centerCrop()
                                         .into(img_men);
 
                                 Picasso
                                         .get()
                                         .load(womenObj.getString("image"))
                                         .placeholder(R.drawable.placeholder_image)
+                                        .fit().centerCrop()
                                         .into(img_women);
 
 
@@ -215,6 +218,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.LENGTH_LONG).show();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 finish();
+                break;
+
+            case R.id.orderHistory:
+                startActivity(new Intent(getApplicationContext(), OrderHistoryActivity.class));
                 break;
         }
 

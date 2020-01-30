@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.example.tailorapp.R;
 import com.example.tailorapp.database.DatabaseHelper;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
         final Model_Cart item = list.get(position);
 
         holder.tv_name.setText(item.getName());
-        holder.tv_price.setText(item.getPrice());
+        holder.tv_price.setText("Rs." + String.valueOf(item.getAmount()));
         holder.tv_fabric_details.setText(item.getFabric_details());
         holder.tv_measurement_details.setText(item.getMeasurements());
         holder.tv_pickup_date.setText(item.getPickupDate());
@@ -63,10 +62,10 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
 
                 if (list.size() == 0){
                     CartActivity.emptyCartLayout.setVisibility(View.VISIBLE);
-                    CartActivity.btn_place_order.setVisibility(View.INVISIBLE);
+                    CartActivity.subTotalLayout.setVisibility(View.INVISIBLE);
                 } else {
                     CartActivity.emptyCartLayout.setVisibility(View.INVISIBLE);
-                    CartActivity.btn_place_order.setVisibility(View.VISIBLE);
+                    CartActivity.subTotalLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -78,6 +77,7 @@ public class Adapter_Cart extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> 
         databaseHelper.deleteItem(id);
         list.remove(position);
         notifyDataSetChanged();
+        CartActivity.tv_subTotal.setText(String.valueOf(databaseHelper.sum()));
         Toast.makeText(context, "Product removed from Cart",
                 Toast.LENGTH_LONG).show();
     }

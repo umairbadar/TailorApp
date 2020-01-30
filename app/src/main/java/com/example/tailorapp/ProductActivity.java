@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -24,14 +25,27 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.tailorapp.cart.DbBitmapUtility;
+import com.example.tailorapp.contants.Api;
+import com.example.tailorapp.contants.AppController;
 import com.example.tailorapp.database.DatabaseHelper;
 import com.example.tailorapp.tabLayout.TabsActivity;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,11 +54,12 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressDialog progressDialog;
 
     private String category_id, product_id, name, price, image;
+    private int amount, discount;
     private ImageView product_img;
     private TextView tv_name, tv_price, tv_date, tv_time;
     private DatePickerDialog datePicker;
     private RadioGroup radioGrpFabric, radioGrpMeasurements;
-    private RadioButton radioBtnFabric,radioBtnMeasurements;
+    private RadioButton radioBtnFabric, radioBtnMeasurements;
 
     private static final int REQUEST_WRITE_PERMISSION = 786;
     private final int CODE_GALLERY_REQUEST = 999;
@@ -59,6 +74,8 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         category_id = getIntent().getStringExtra("cat_id");
         product_id = getIntent().getStringExtra("product_id");
+        amount = getIntent().getIntExtra("amount", 0);
+
         name = getIntent().getStringExtra("product_name");
         price = getIntent().getStringExtra("product_price");
         image = getIntent().getStringExtra("product_image");
@@ -92,29 +109,32 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         radioGrpFabric = findViewById(R.id.radioGrpFabric);
         radioGrpMeasurements = findViewById(R.id.radioGrpMeasurements);
+
+        getProductDiscount();
     }
 
-    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status){
+    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount) {
 
         progressDialog.setTitle("Updating Cart");
         progressDialog.setMessage("Please wait while we are updating your cart.");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-            Bitmap bitmap = ((BitmapDrawable)product_img.getDrawable()).getBitmap();
-            insertData = databaseHelper.addData(
-                    id,
-                    name,
-                    price,
-                    DbBitmapUtility.getBytes(bitmap),
-                    fabric_details,
-                    measurements,
-                    pickupDate,
-                    pickupTime,
-                    image_status
-            );
+        Bitmap bitmap = ((BitmapDrawable) product_img.getDrawable()).getBitmap();
+        insertData = databaseHelper.addData(
+                id,
+                name,
+                price,
+                DbBitmapUtility.getBytes(bitmap),
+                fabric_details,
+                measurements,
+                pickupDate,
+                pickupTime,
+                image_status,
+                amount
+        );
 
-        if (insertData){
+        if (insertData) {
 
             progressDialog.dismiss();
 
@@ -214,28 +234,75 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         mTimePicker.show();
     }
 
-    private void validations(){
+    private void getProductDiscount() {
+
+        StringRequest req = new StringRequest(Request.Method.POST, Api.ProductDetailURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean status = jsonObject.getBoolean("success");
+                            if (status) {
+
+                                JSONObject innerObj = jsonObject.getJSONObject("product");
+                                JSONArray jsonArray = innerObj.getJSONArray("options");
+                                JSONObject Obj1 = jsonArray.getJSONObject(1);
+                                JSONArray jsonArray1 = Obj1.getJSONArray("product_option_value");
+                                JSONObject Obj2 = jsonArray1.getJSONObject(0);
+                                discount = Obj2.getInt("amount");
+
+                            } else {
+
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("product_id", product_id);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(req);
+    }
+
+    private void validations() {
 
         int fabricID = radioGrpFabric.getCheckedRadioButtonId();
         int measurementID = radioGrpMeasurements.getCheckedRadioButtonId();
 
-        if (fabricID == -1){
+        if (fabricID == -1) {
 
             Toast.makeText(getApplicationContext(), "Please select fabric details",
                     Toast.LENGTH_LONG).show();
 
-        } else if (measurementID == -1){
+        } else if (measurementID == -1) {
 
             Toast.makeText(getApplicationContext(), "Please select measurement details",
                     Toast.LENGTH_LONG).show();
 
-        } else if (TextUtils.isEmpty(tv_date.getText())){
+        } else if (TextUtils.isEmpty(tv_date.getText())) {
 
             Toast.makeText(getApplicationContext(), "Please select pickup date",
                     Toast.LENGTH_LONG).show();
-        }
-
-        else if (TextUtils.isEmpty(tv_time.getText())){
+        } else if (TextUtils.isEmpty(tv_time.getText())) {
 
             Toast.makeText(getApplicationContext(), "Please select pickup time",
                     Toast.LENGTH_LONG).show();
@@ -249,10 +316,29 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             String pickupDate = tv_date.getText().toString();
             String pickupTime = tv_time.getText().toString();
 
-            if (img_req == 1){
-                AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true");
+            if (img_req == 1) {
+
+                if (radioBtnFabric.getId() == R.id.radioBtnHaveFabric) {
+
+                    int finalPrice = amount - discount;
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", finalPrice);
+
+                } else {
+
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", amount);
+                }
+
             } else {
-                AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false");
+
+                if (radioBtnFabric.getId() == R.id.radioBtnHaveFabric) {
+
+                    int finalPrice = amount - discount;
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", finalPrice);
+
+                } else {
+
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", amount);
+                }
             }
         }
     }

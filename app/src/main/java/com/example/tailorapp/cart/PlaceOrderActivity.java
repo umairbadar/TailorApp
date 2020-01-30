@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -42,15 +43,20 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
 
     private RadioGroup radioGrpShippingMethods;
     private RadioButton radioButton, radioBtnCashOnDelivery;
-    RadioButton[] rbArray = new RadioButton[10];
+    private RadioButton[] rbArray = new RadioButton[10];
+    private int[] shippingPrice = new int[10];
 
     private DatabaseHelper databaseHelper;
     private SharedPreferences sharedPreferences;
+    private String subTotal;
+    private TextView tv_totalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_order);
+
+        subTotal = getIntent().getStringExtra("sub_total");
 
         Toolbar toolbar = findViewById(R.id.toolbar_placeOrder);
         setSupportActionBar(toolbar);
@@ -71,6 +77,19 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         getShippingMethods();
 
         radioBtnCashOnDelivery = findViewById(R.id.radioBtnCashOnDelivery);
+
+        tv_totalPrice = findViewById(R.id.tv_totalPrice);
+        tv_totalPrice.setText(subTotal);
+
+        radioGrpShippingMethods.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                int radioID = radioGrpShippingMethods.getCheckedRadioButtonId();
+                int subTotalPrice = Integer.parseInt(subTotal);
+                tv_totalPrice.setText(String.valueOf(subTotalPrice + shippingPrice[radioID]));
+            }
+        });
     }
 
     private void getShippingMethods() {
@@ -94,6 +113,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                                     rbArray[i].setText(innerObj.getString("title"));
                                     rbArray[i].setTag(innerObj.getString("code"));
                                     rbArray[i].setId(i);
+                                    shippingPrice[i] = innerObj.getInt("cost");
                                     RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
                                     radioGrpShippingMethods.addView(rbArray[i], params);
 
@@ -116,8 +136,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     }
                 });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        requestQueue.add(req);
+        AppController.getInstance().addToRequestQueue(req);
     }
 
     private String bitmapToBase64(Bitmap bitmap) {
@@ -141,7 +160,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
         try {
             jsonObj.put("user_id", sharedPreferences.getString("id", ""));
             jsonObj.put("token", sharedPreferences.getString("token", ""));
-            jsonObj.put("shipping_method", radioButton.getTag().toString());
+            jsonObj.put("shipping_code", radioButton.getTag().toString());
+            jsonObj.put("shipping_method", radioButton.getText().toString());
+            jsonObj.put("shipping_price", shippingPrice[radioID]);
+            jsonObj.put("sub_total", subTotal);
+            jsonObj.put("total", tv_totalPrice.getText().toString());
 
             JSONArray jsonArray = new JSONArray();
             Cursor data = databaseHelper.getData();
@@ -164,11 +187,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                         } else {
                             jsonObject.put("image", "false");
                         }
-                        //Log.e("image", "data:image/jpeg;base64," + image);
                         jsonObject.put("fabric", data.getString(4));
                         jsonObject.put("measurement", data.getString(5));
                         jsonObject.put("date", data.getString(6));
                         jsonObject.put("time", data.getString(7));
+                        jsonObject.put("amount", data.getString(9));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

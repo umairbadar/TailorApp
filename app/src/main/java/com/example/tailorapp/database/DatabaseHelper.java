@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL7 = "Pickup_date";
     private static final String COL8 = "Pickup_time";
     private static final String COL9 = "image_status";
+    private static final String COL10 = "amount";
 
 
     public DatabaseHelper(Context context){
@@ -31,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL1 + " TEXT, " + COL2
                 + " TEXT, " + COL3 + " TEXT, " + COL4 + " BLOB, "  + COL5 + " TEXT, " + COL6 + " TEXT, "
-                + COL7 + " TEXT, " + COL8 + " TEXT, " + COL9 + " TEXT)";
+                + COL7 + " TEXT, " + COL8 + " TEXT, " + COL9 + " TEXT, " + COL10 + " REAL)";
         db.execSQL(createTable);
     }
 
@@ -41,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addData(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status){
+    public boolean addData(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, id);
@@ -53,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL7, pickupDate);
         contentValues.put(COL8, pickupTime);
         contentValues.put(COL9, image_status);
+        contentValues.put(COL10, amount);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 
@@ -94,5 +96,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "DELETE FROM " + TABLE_NAME;
         db.execSQL(query);
+    }
+
+    public int sum(){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT SUM(" + COL10 + ") FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+
+            return cursor.getInt(0);
+        }
+        else{
+
+            return  -1;
+        }
+        //cursor.close();
     }
 }

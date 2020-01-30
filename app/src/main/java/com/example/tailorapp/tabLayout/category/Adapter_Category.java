@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tailorapp.ProductActivity;
 import com.example.tailorapp.R;
@@ -60,6 +59,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.View
                 intent.putExtra("product_id", item.getId());
                 intent.putExtra("product_name", item.getName());
                 intent.putExtra("product_price", item.getPrice());
+                intent.putExtra("amount", item.getAmount());
                 intent.putExtra("product_image", item.getImage());
                 intent.putExtra("cat_id", TabsActivity.category_id);
                 view.getContext().startActivity(intent);

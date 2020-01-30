@@ -6,12 +6,14 @@ public class Model_Category {
     private String name;
     private String price;
     private String image;
+    private int amount;
 
-    public Model_Category(String id, String name, String price, String image) {
+    public Model_Category(String id, String name, String price, String image, int amount) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
+        this.amount = amount;
     }
 
     public String getId() {
@@ -28,5 +30,9 @@ public class Model_Category {
 
     public String getImage() {
         return image;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 }
