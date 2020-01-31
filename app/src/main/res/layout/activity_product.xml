@@ -113,6 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/i_have_fabric"
+                android:tag="32"
                 android:typeface="monospace"/>
 
             <RadioButton
@@ -120,6 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/i_don_t_have_fabric"
+                android:tag="31"
                 android:typeface="monospace"/>
 
         </RadioGroup>
@@ -148,6 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/use_my_existing_fit_garment"
+                android:tag="49"
                 android:typeface="monospace"/>
 
             <RadioButton
@@ -155,6 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/send_the_tailor_to_my_home_for_taking_measurements"
+                android:tag="50"
                 android:layout_marginTop="5dp"
                 android:typeface="monospace"/>
 

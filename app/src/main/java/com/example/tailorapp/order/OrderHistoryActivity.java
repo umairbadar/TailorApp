@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -30,11 +32,11 @@ import java.util.Map;
 
 public class OrderHistoryActivity extends AppCompatActivity {
 
+    private RecyclerView orderHistoryList;
     private Adapter_OrderHistory adapter;
     private List<Model_OrderHistory> list;
     private ProgressDialog progressDialog;
-
-    private SharedPreferences sharedPreferences;
+    private TextView tv_no_order;
     private String user_id, token;
 
 
@@ -55,12 +57,13 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private void initView(){
 
         progressDialog = new ProgressDialog(this);
+        tv_no_order = findViewById(R.id.tv_no_order);
 
-        sharedPreferences = getSharedPreferences("MyPre", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPre", MODE_PRIVATE);
         user_id = sharedPreferences.getString("id", "");
         token = sharedPreferences.getString("token", "");
 
-        RecyclerView orderHistoryList = findViewById(R.id.orderHistoryList);
+        orderHistoryList = findViewById(R.id.orderHistoryList);
         orderHistoryList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list = new ArrayList<>();
         adapter = new Adapter_OrderHistory(list, getApplicationContext());
@@ -84,6 +87,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean status = jsonObject.getBoolean("success");
                             if (status){
+                                tv_no_order.setVisibility(View.INVISIBLE);
+                                orderHistoryList.setVisibility(View.VISIBLE);
                                 progressDialog.dismiss();
                                 JSONArray jsonArray = jsonObject.getJSONArray("orders");
                                 for (int i = 0; i < jsonArray.length(); i++){
@@ -109,9 +114,9 @@ public class OrderHistoryActivity extends AppCompatActivity {
                                 adapter.notifyDataSetChanged();
 
                             } else {
+                                tv_no_order.setVisibility(View.VISIBLE);
+                                orderHistoryList.setVisibility(View.INVISIBLE);
                                 progressDialog.hide();
-                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"),
-                                        Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {

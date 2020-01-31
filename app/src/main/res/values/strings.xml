@@ -45,4 +45,5 @@
     <string name="total_products">Total Products</string>
     <string name="status">Status</string>
     <string name="order_id">Order ID</string>
+    <string name="no_order_msg">Opppsss. It Seems that you haven\'t submitted any orders yet.</string>
 </resources>

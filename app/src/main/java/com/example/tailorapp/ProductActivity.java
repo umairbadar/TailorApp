@@ -113,7 +113,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         getProductDiscount();
     }
 
-    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount) {
+    public void AddData(String id, String name, String price, String image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount, String fabric_id, String measurement_id) {
 
         progressDialog.setTitle("Updating Cart");
         progressDialog.setMessage("Please wait while we are updating your cart.");
@@ -131,7 +131,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 pickupDate,
                 pickupTime,
                 image_status,
-                amount
+                amount,
+                fabric_id,
+                measurement_id
         );
 
         if (insertData) {
@@ -212,7 +214,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             public void onDateSet(DatePicker view, int year,
                                   int monthOfYear, int dayOfMonth) {
                 // set date of month , month and year value in the edit text
-                tv_date.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                tv_date.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
             }
         }, mYear, mMonth, mDay);
         datePicker.show();
@@ -312,7 +314,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             radioBtnMeasurements = findViewById(measurementID);
 
             String fabric_details = radioBtnFabric.getText().toString();
+            String fabric_id = radioBtnFabric.getTag().toString();
             String measurements = radioBtnMeasurements.getText().toString();
+            String measurement_id = radioBtnMeasurements.getTag().toString();
             String pickupDate = tv_date.getText().toString();
             String pickupTime = tv_time.getText().toString();
 
@@ -321,11 +325,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 if (radioBtnFabric.getId() == R.id.radioBtnHaveFabric) {
 
                     int finalPrice = amount - discount;
-                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", finalPrice);
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", finalPrice, fabric_id, measurement_id);
 
                 } else {
 
-                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", amount);
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "true", amount, fabric_id, measurement_id);
                 }
 
             } else {
@@ -333,11 +337,11 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
                 if (radioBtnFabric.getId() == R.id.radioBtnHaveFabric) {
 
                     int finalPrice = amount - discount;
-                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", finalPrice);
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", finalPrice, fabric_id, measurement_id);
 
                 } else {
 
-                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", amount);
+                    AddData(product_id, name, price, image, fabric_details, measurements, pickupDate, pickupTime, "false", amount, fabric_id, measurement_id);
                 }
             }
         }

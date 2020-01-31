@@ -20,6 +20,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL8 = "Pickup_time";
     private static final String COL9 = "image_status";
     private static final String COL10 = "amount";
+    private static final String COL11 = "fabric_id";
+    private static final String COL12 = "measurement_id";
 
 
     public DatabaseHelper(Context context){
@@ -32,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createTable = "CREATE TABLE " + TABLE_NAME + " (" + COL1 + " TEXT, " + COL2
                 + " TEXT, " + COL3 + " TEXT, " + COL4 + " BLOB, "  + COL5 + " TEXT, " + COL6 + " TEXT, "
-                + COL7 + " TEXT, " + COL8 + " TEXT, " + COL9 + " TEXT, " + COL10 + " REAL)";
+                + COL7 + " TEXT, " + COL8 + " TEXT, " + COL9 + " TEXT, " + COL10 + " REAL, " + COL11 + " TEXT, " + COL12 + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -42,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addData(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount){
+    public boolean addData(String id, String name, String price, byte[] image, String fabric_details, String measurements, String pickupDate, String pickupTime, String image_status, int amount, String fabric_id, String measurement_id){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, id);
@@ -55,6 +57,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL8, pickupTime);
         contentValues.put(COL9, image_status);
         contentValues.put(COL10, amount);
+        contentValues.put(COL11, fabric_id);
+        contentValues.put(COL12, measurement_id);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
 

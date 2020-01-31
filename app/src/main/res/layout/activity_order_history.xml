@@ -17,4 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/tv_no_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/no_order_msg"
+        android:gravity="center"
+        android:textSize="@dimen/text_size"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:visibility="invisible"/>
+
 </RelativeLayout>

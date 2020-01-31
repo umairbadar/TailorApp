@@ -75,7 +75,7 @@ public class TabsFragment extends Fragment {
     private void getCategoryList(final String cat_id){
 
         progressDialog.setTitle("Loading Products");
-        progressDialog.setMessage("Please wait while we load products");
+        progressDialog.setMessage("Please wait while we are loading products");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
