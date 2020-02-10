@@ -53,7 +53,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseHelper databaseHelper;
     private ProgressDialog progressDialog;
 
-    private String category_id, product_id, name, price, image;
+    private String category_id, product_id, name, price, image, cat_name;
     private int amount, discount;
     private ImageView product_img;
     private TextView tv_name, tv_price, tv_date, tv_time;
@@ -73,6 +73,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_product);
 
         category_id = getIntent().getStringExtra("cat_id");
+        cat_name = getIntent().getStringExtra("name");
         product_id = getIntent().getStringExtra("product_id");
         amount = getIntent().getIntExtra("amount", 0);
 
@@ -142,6 +143,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
             Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
             intent.putExtra("cat_id", category_id);
+            intent.putExtra("name", cat_name);
             startActivity(intent);
             finish();
 
@@ -199,6 +201,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
         intent.putExtra("cat_id", category_id);
+        intent.putExtra("name", cat_name);
         startActivity(intent);
         finish();
     }

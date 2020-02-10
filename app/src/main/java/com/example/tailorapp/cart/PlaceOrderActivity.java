@@ -1,9 +1,12 @@
 package com.example.tailorapp.cart;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -175,15 +178,16 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                     if (data.getString(8).equals("true")) {
                         Bitmap bitmap = DbBitmapUtility.getImage(data.getBlob(3));
                         String image = bitmapToBase64(bitmap);
-                        jsonObject.put("Upload_A_Style_Instead", image);
+                        jsonObject.put("upload_a_style_instead", "data:image/jpeg;base64," + image);
+                        //Log.e("Image", "data:image/jpeg;base64," + image);
 
                     } else {
-                        jsonObject.put("Upload_A_Style_Instead", "false");
+                        jsonObject.put("upload_a_style_instead", "false");
                     }
-                    jsonObject.put("Fabric_Details", data.getString(10));
-                    jsonObject.put("Measurements", data.getString(11));
-                    jsonObject.put("Pickup_Date", data.getString(6));
-                    jsonObject.put("Pickup_Time", data.getString(7));
+                    jsonObject.put("fabric_details", data.getString(10));
+                    jsonObject.put("measurements", data.getString(11));
+                    jsonObject.put("pickup_date", data.getString(6));
+                    jsonObject.put("pickup_time", data.getString(7));
                     jsonObject.put("amount", data.getString(9));
 
                 } catch (JSONException e) {
@@ -214,14 +218,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
-                        Log.e("response", response);
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-
-                        /*try {
+                        try {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean status = jsonObject.getBoolean("success");
-                            if (status){
+                            if (status) {
                                 progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Order has been created.",
                                         Toast.LENGTH_LONG).show();
@@ -236,7 +236,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }*/
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -277,10 +277,27 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(getApplicationContext(), "Please select Payment Method",
                     Toast.LENGTH_LONG).show();
         } else {
-
-            //Log.e("Data", getAllProducts().toString());
-             sendData();
+            showDialog(this,
+                    "Confirm Order",
+                    "Are you Sure? You want to place order.\nPayment Method: Cash on Delivery\nTotal Amount: " + tv_totalPrice.getText().toString());
         }
+    }
+
+    public void showDialog(Activity activity, String title, CharSequence message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        if (title != null) builder.setTitle(title);
+
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                sendData();
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
 

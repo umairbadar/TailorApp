@@ -4,7 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -14,10 +19,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.tailorapp.MainActivity;
 import com.example.tailorapp.R;
+import com.example.tailorapp.cart.CartActivity;
 import com.example.tailorapp.contants.Api;
 import com.example.tailorapp.contants.AppController;
+import com.example.tailorapp.database.DatabaseHelper;
 import com.google.android.material.tabs.TabLayout;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,8 +41,12 @@ public class TabsActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
-    public static String category_id;
+    public static String category_id, name;
     private ArrayList<String> cat_ids;
+
+    private NotificationBadge badge;
+    private int count;
+    DatabaseHelper databaseHelper;
 
 
     @Override
@@ -42,10 +55,11 @@ public class TabsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tabs);
 
         category_id = getIntent().getStringExtra("cat_id");
+        name = getIntent().getStringExtra("name");
 
         Toolbar toolbar = findViewById(R.id.toolbar_mens);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Trending Men Styles");
+        getSupportActionBar().setTitle(name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initializing Views
@@ -53,6 +67,14 @@ public class TabsActivity extends AppCompatActivity {
     }
 
     private void initViews(){
+
+        databaseHelper = new DatabaseHelper(this);
+
+        Cursor data = databaseHelper.getCount();
+        count = -1;
+        while(data.moveToNext()){
+            count = data.getInt(0);
+        }
 
         cat_ids = new ArrayList<>();
 
@@ -80,6 +102,39 @@ public class TabsActivity extends AppCompatActivity {
         });
 
         getCategories();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.tabs_menu, menu);
+
+        View view = menu.findItem(R.id.cart).getActionView();
+        badge = view.findViewById(R.id.badge);
+        ImageView imageView = view.findViewById(R.id.cart_icon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent cartIntent = new Intent(TabsActivity.this, CartActivity.class);
+                startActivity(cartIntent);
+
+            }
+        });
+
+        updateCartCount();
+        return true;
+    }
+
+    private void updateCartCount(){
+
+        if (badge == null) return;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                badge.setText(String.valueOf(count));
+            }
+        });
     }
 
     private void getCategories(){

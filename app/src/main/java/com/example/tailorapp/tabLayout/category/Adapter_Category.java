@@ -62,6 +62,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.View
                 intent.putExtra("amount", item.getAmount());
                 intent.putExtra("product_image", item.getImage());
                 intent.putExtra("cat_id", TabsActivity.category_id);
+                intent.putExtra("name", TabsActivity.name);
                 view.getContext().startActivity(intent);
                 ((Activity)context).finish();
 

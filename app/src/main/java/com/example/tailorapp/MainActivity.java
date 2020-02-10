@@ -236,12 +236,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_men_styles:
                 Intent menIntent = new Intent(getApplicationContext(), TabsActivity.class);
                 menIntent.putExtra("cat_id", menID);
+                menIntent.putExtra("name", "Trending Men Styles");
                 startActivity(menIntent);
                 break;
 
             case R.id.btn_women_styles:
                 Intent womenIntent = new Intent(getApplicationContext(), TabsActivity.class);
                 womenIntent.putExtra("cat_id", womenID);
+                womenIntent.putExtra("name", "Trending Women Styles");
                 startActivity(womenIntent);
                 break;
 

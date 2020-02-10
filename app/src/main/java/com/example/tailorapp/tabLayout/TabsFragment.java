@@ -41,7 +41,6 @@ public class TabsFragment extends Fragment {
     private Adapter_Category adapter;
     private List<Model_Category> list;
     private String cat_id;
-    private ProgressDialog progressDialog;
 
     public static TabsFragment newInstance() {
         return new TabsFragment();
@@ -58,8 +57,6 @@ public class TabsFragment extends Fragment {
 
     private void initViews(View view) {
 
-        progressDialog = new ProgressDialog(getContext());
-
         if (getArguments() != null){
             cat_id = getArguments().getString("cat_id");
         }
@@ -74,11 +71,6 @@ public class TabsFragment extends Fragment {
 
     private void getCategoryList(final String cat_id){
 
-        progressDialog.setTitle("Loading Products");
-        progressDialog.setMessage("Please wait while we are loading products");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
         StringRequest req = new StringRequest(Request.Method.POST, Api.CategoryListURL,
                 new Response.Listener<String>() {
                     @Override
@@ -88,7 +80,6 @@ public class TabsFragment extends Fragment {
                             JSONObject jsonObject = new JSONObject(response);
                             boolean status = jsonObject.getBoolean("success");
                             if (status){
-                                progressDialog.dismiss();
                                 JSONArray jsonArray = jsonObject.getJSONArray("products");
                                 for (int i = 0; i < jsonArray.length(); i++){
 
@@ -113,7 +104,6 @@ public class TabsFragment extends Fragment {
                                 adapter.notifyDataSetChanged();
 
                             } else {
-                                progressDialog.hide();
                                 Toast.makeText(getContext(), jsonObject.getString("error"),
                                         Toast.LENGTH_LONG).show();
                             }
@@ -125,7 +115,6 @@ public class TabsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressDialog.hide();
                         Toast.makeText(getContext(), error.getMessage(),
                                 Toast.LENGTH_LONG).show();
                     }
