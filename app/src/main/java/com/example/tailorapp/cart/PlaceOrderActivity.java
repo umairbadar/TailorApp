@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,10 +13,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -223,11 +228,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
                             boolean status = jsonObject.getBoolean("success");
                             if (status) {
                                 progressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(), "Order has been created.",
-                                        Toast.LENGTH_LONG).show();
-                                databaseHelper.delete();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
+                                showOKDialog(PlaceOrderActivity.this, "Order has been created.");
 
                             } else {
                                 progressDialog.hide();
@@ -277,27 +278,61 @@ public class PlaceOrderActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(getApplicationContext(), "Please select Payment Method",
                     Toast.LENGTH_LONG).show();
         } else {
-            showDialog(this,
-                    "Confirm Order",
-                    "Are you Sure? You want to place order.\nPayment Method: Cash on Delivery\nTotal Amount: " + tv_totalPrice.getText().toString());
+            showDialog(this, "Are you sure you want to place an order?");
         }
     }
 
-    public void showDialog(Activity activity, String title, CharSequence message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+    public void showDialog(Activity activity, String msg) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.confirmation_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        if (title != null) builder.setTitle(title);
+        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        text.setText(msg);
 
-        builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_ok);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
+            public void onClick(View v) {
+                dialog.dismiss();
                 sendData();
             }
         });
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
+        Button dialogCancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        dialogCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void showOKDialog(Activity activity, String msg) {
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_ok);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        text.setText(msg);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.btn_ok);
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                databaseHelper.delete();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        dialog.show();
     }
 
 

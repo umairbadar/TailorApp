@@ -10,7 +10,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="men_s_tailoring">Men</string>
     <string name="women_s_tailoring">Women</string>
-    <string name="new_arrivals">New Arrivals</string>
+    <string name="new_arrivals">Custom Tailoring</string>
     <string name="logout">Logout</string>
     <string name="no_internet_msg">Opppss!!\nIt seems that you haven\'t connected to the Internet.</string>
     <string name="cart">Cart</string>
@@ -46,4 +46,8 @@
     <string name="status">Status</string>
     <string name="order_id">Order ID</string>
     <string name="no_order_msg">Opppsss. It Seems that you haven\'t submitted any orders yet.</string>
+    <string name="are_you_sure_you_want_to_place_an_order">Are you sure you want to place an order?</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="note">The above mentioned price is the initial price and the prices may vary according to the design and requirements.</string>
 </resources>

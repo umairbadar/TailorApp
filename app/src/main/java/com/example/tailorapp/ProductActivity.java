@@ -53,10 +53,10 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     private DatabaseHelper databaseHelper;
     private ProgressDialog progressDialog;
 
-    private String category_id, product_id, name, price, image, cat_name;
+    private String parentActivityName, category_id, product_id, name, price, image, cat_name, upload;
     private int amount, discount;
     private ImageView product_img;
-    private TextView tv_name, tv_price, tv_date, tv_time;
+    private TextView tv_name, tv_price, tv_date, tv_time, tv_note;
     private DatePickerDialog datePicker;
     private RadioGroup radioGrpFabric, radioGrpMeasurements;
     private RadioButton radioBtnFabric, radioBtnMeasurements;
@@ -72,14 +72,19 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
 
+        parentActivityName = getIntent().getStringExtra("ParentActivityName");
+
         category_id = getIntent().getStringExtra("cat_id");
         cat_name = getIntent().getStringExtra("name");
         product_id = getIntent().getStringExtra("product_id");
         amount = getIntent().getIntExtra("amount", 0);
+        upload = getIntent().getStringExtra("upload");
 
         name = getIntent().getStringExtra("product_name");
         price = getIntent().getStringExtra("product_price");
         image = getIntent().getStringExtra("product_image");
+
+        Log.e("image", image);
 
         Toolbar toolbar = findViewById(R.id.toolbar_product);
         setSupportActionBar(toolbar);
@@ -87,6 +92,13 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
         //Initializing Views
         initViews();
+
+
+        if (parentActivityName.equals("Main")){
+            tv_note.setVisibility(View.VISIBLE);
+        } else {
+            tv_note.setVisibility(View.GONE);
+        }
     }
 
     private void initViews() {
@@ -98,6 +110,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         tv_price = findViewById(R.id.tv_price);
         tv_date = findViewById(R.id.tv_date);
         tv_time = findViewById(R.id.tv_time);
+        tv_note = findViewById(R.id.tv_note);
         product_img = findViewById(R.id.product_image);
 
         tv_name.setText(name);
@@ -141,11 +154,21 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
 
             progressDialog.dismiss();
 
-            Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
-            intent.putExtra("cat_id", category_id);
-            intent.putExtra("name", cat_name);
-            startActivity(intent);
-            finish();
+            if (parentActivityName.equals("Tabs")) {
+
+                Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
+                intent.putExtra("cat_id", category_id);
+                intent.putExtra("name", cat_name);
+                startActivity(intent);
+                finish();
+
+            } else {
+
+                Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(mainIntent);
+                finish();
+            }
 
             Toast.makeText(getApplicationContext(), "Product Added to Cart",
                     Toast.LENGTH_LONG).show();
@@ -171,6 +194,7 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
             Uri filePath = data.getData();
 
             try {
+                upload = "0";
                 InputStream inputStream = getApplicationContext().getContentResolver().openInputStream(filePath);
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 product_img.setImageBitmap(bitmap);
@@ -199,11 +223,22 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
 
-        Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
-        intent.putExtra("cat_id", category_id);
-        intent.putExtra("name", cat_name);
-        startActivity(intent);
-        finish();
+        if (parentActivityName.equals("Tabs")) {
+
+            Intent intent = new Intent(getApplicationContext(), TabsActivity.class);
+            intent.putExtra("cat_id", category_id);
+            intent.putExtra("name", cat_name);
+            startActivity(intent);
+            finish();
+
+        } else {
+
+            Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(mainIntent);
+            finish();
+        }
+
     }
 
     public void showDatePicker() {
@@ -293,7 +328,9 @@ public class ProductActivity extends AppCompatActivity implements View.OnClickLi
         int fabricID = radioGrpFabric.getCheckedRadioButtonId();
         int measurementID = radioGrpMeasurements.getCheckedRadioButtonId();
 
-        if (fabricID == -1) {
+        if (upload.equals("1")){
+          Toast.makeText(getApplicationContext(), "Please upload design", Toast.LENGTH_LONG).show();
+        } else if (fabricID == -1) {
 
             Toast.makeText(getApplicationContext(), "Please select fabric details",
                     Toast.LENGTH_LONG).show();

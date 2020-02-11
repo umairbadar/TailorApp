@@ -6,4 +6,5 @@
     <color name="buttonbg">#C62C3039</color>
     <color name="white">#FFFFFF</color>
     <color name="pendingStatus">#029C54</color>
+    <color name="red">#FF0000</color>
 </resources>

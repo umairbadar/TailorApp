@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.example.tailorapp.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -36,12 +38,22 @@ public class Adapter_OrderHistory extends RecyclerView.Adapter<Adapter_OrderHist
 
         Model_OrderHistory item = list.get(position);
 
-        holder.tv_id.setText("Order ID: " + item.getOrder_id());
-        holder.tv_name.setText("Customers Name: " + item.getName());
-        holder.tv_date.setText("Date: " + item.getDate());
+        String[] date = item.getDate().split("/");
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat month_date = new SimpleDateFormat("MMM");
+        int monthnum = Integer.parseInt(date[0]);
+        cal.set(Calendar.MONTH, monthnum);
+        String month_name = month_date.format(cal.getTime());
+
+        holder.tv_id.setText("Order: #" + item.getOrder_id());
+        holder.tv_name.setText(item.getName());
+        holder.tv_month.setText(month_name.toUpperCase());
+        holder.tv_day.setText(date[1]);
+        holder.tv_year.setText(date[2]);
         holder.tv_products.setText("Total Prodcuts: " + item.getProducts());
-        holder.tv_total.setText("Total Price: " + item.getTotal());
-        holder.tv_status.setText("Status: " + item.getStatus());
+        holder.tv_total.setText("Total:\n" + item.getTotal());
+        holder.tv_status.setText(item.getStatus());
     }
 
     @Override
@@ -49,16 +61,18 @@ public class Adapter_OrderHistory extends RecyclerView.Adapter<Adapter_OrderHist
         return list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tv_id, tv_name, tv_date, tv_products, tv_total, tv_status;
+        TextView tv_id, tv_name, tv_day, tv_products, tv_total, tv_status, tv_month, tv_year;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_id = itemView.findViewById(R.id.tv_id);
             tv_name = itemView.findViewById(R.id.tv_name);
-            tv_date = itemView.findViewById(R.id.tv_date);
+            tv_day = itemView.findViewById(R.id.tv_day);
+            tv_month = itemView.findViewById(R.id.tv_month);
+            tv_year = itemView.findViewById(R.id.tv_year);
             tv_products = itemView.findViewById(R.id.tv_products);
             tv_total = itemView.findViewById(R.id.tv_total);
             tv_status = itemView.findViewById(R.id.tv_status);

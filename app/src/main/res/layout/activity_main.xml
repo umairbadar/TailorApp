@@ -25,15 +25,19 @@
             layout="@layout/main_app_bar"
             android:id="@+id/toolbar_MainMenu"/>
 
-        <TextView
+        <Button
+            android:id="@+id/btn_custom_tailoring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_arrivals"
-            android:textSize="24sp"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
             android:textColor="@color/white"
-            android:typeface="monospace"/>
+            android:typeface="monospace"
+            android:background="@drawable/roundedbutton"
+            android:onClick="onClick"/>
 
     </FrameLayout>
     <!--Slider Section Ends-->

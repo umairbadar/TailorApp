@@ -56,6 +56,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.View
             public void onClick(View view) {
 
                 Intent intent = new Intent(view.getContext(), ProductActivity.class);
+                intent.putExtra("ParentActivityName", "Tabs");
                 intent.putExtra("product_id", item.getId());
                 intent.putExtra("product_name", item.getName());
                 intent.putExtra("product_price", item.getPrice());
@@ -63,6 +64,7 @@ public class Adapter_Category extends RecyclerView.Adapter<Adapter_Category.View
                 intent.putExtra("product_image", item.getImage());
                 intent.putExtra("cat_id", TabsActivity.category_id);
                 intent.putExtra("name", TabsActivity.name);
+                intent.putExtra("upload", "0");
                 view.getContext().startActivity(intent);
                 ((Activity)context).finish();
 

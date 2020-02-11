@@ -1,5 +1,6 @@
 package com.example.tailorapp.cart;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,19 +45,61 @@ public class CartActivity extends AppCompatActivity implements View.OnClickListe
     public static LinearLayout emptyCartLayout;
     public static LinearLayout subTotalLayout;
     public static TextView tv_subTotal;
+    private String parentActivityName, cat_id, cat_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        parentActivityName = getIntent().getStringExtra("ParentClassName");
+        if (parentActivityName.equals("tabLayout.TabsActivity")){
+
+            cat_id = getIntent().getStringExtra("cat_id");
+            cat_name = getIntent().getStringExtra("name");
+        }
+
         Toolbar toolbar = findViewById(R.id.toolbar_cart);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Cart");
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initializing Views
         initViews();
+    }
+
+    @Override
+    public Intent getSupportParentActivityIntent() {
+
+        return getParentActivityIntentImplement();
+    }
+
+
+    @Override
+    public Intent getParentActivityIntent() {
+        return getParentActivityIntentImplement();
+    }
+
+    private Intent getParentActivityIntentImplement(){
+
+        Intent parentIntent= getIntent();
+        String className = parentIntent.getStringExtra("ParentClassName");
+
+        Intent newIntent=null;
+        try {
+
+            if (className.equals("tabLayout.TabsActivity")) {
+                newIntent = new Intent(CartActivity.this, Class.forName("com.example.tailorapp." + className));
+                newIntent.putExtra("cat_id",cat_id);
+                newIntent.putExtra("name",cat_name);
+            } else {
+                newIntent = new Intent(CartActivity.this, Class.forName("com.example.tailorapp." + className));
+            }
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return newIntent;
     }
 
     private void initViews() {

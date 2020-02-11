@@ -117,6 +117,9 @@ public class TabsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent cartIntent = new Intent(TabsActivity.this, CartActivity.class);
+                cartIntent.putExtra("ParentClassName","tabLayout.TabsActivity");
+                cartIntent.putExtra("cat_id",category_id);
+                cartIntent.putExtra("name",name);
                 startActivity(cartIntent);
 
             }

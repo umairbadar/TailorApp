@@ -16,24 +16,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.tailorapp.cart.CartActivity;
 import com.example.tailorapp.contants.Api;
 import com.example.tailorapp.contants.AppController;
 import com.example.tailorapp.database.DatabaseHelper;
 import com.example.tailorapp.order.OrderHistoryActivity;
 import com.example.tailorapp.tabLayout.TabsActivity;
+import com.example.tailorapp.tabLayout.category.Model_Category;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,7 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageView img_men, img_women;
     private TextView tv_men, tv_women;
-    private String menID, womenID;
+    private String menID, womenID, customID, id, name, image, price;
+    private int amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +113,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (status){
 
                                 JSONArray jsonArray = jsonObject.getJSONArray("categories");
-                                JSONObject menObj = jsonArray.getJSONObject(0);
-                                JSONObject womenObj = jsonArray.getJSONObject(1);
+                                JSONObject customObj = jsonArray.getJSONObject(0);
+                                JSONObject menObj = jsonArray.getJSONObject(1);
+                                JSONObject womenObj = jsonArray.getJSONObject(2);
 
+                                customID = customObj.getString("category_id");
                                 menID = menObj.getString("category_id");
                                 womenID = womenObj.getString("category_id");
 
@@ -131,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         .placeholder(R.drawable.placeholder_image)
                                         .fit().centerCrop()
                                         .into(img_women);
+
+                                getCustomTailoringProduct();
 
 
                             } else {
@@ -183,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View view) {
 
                 Intent cartIntent = new Intent(MainActivity.this, CartActivity.class);
+                cartIntent.putExtra("ParentClassName","MainActivity");
                 startActivity(cartIntent);
 
             }
@@ -228,6 +237,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    private void getCustomTailoringProduct(){
+
+
+        StringRequest req = new StringRequest(Request.Method.POST, Api.CategoryListURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean status = jsonObject.getBoolean("success");
+                            if (status){
+                                JSONArray jsonArray = jsonObject.getJSONArray("products");
+                                JSONObject innerObj = jsonArray.getJSONObject(0);
+                                id = innerObj.getString("id");
+                                name = innerObj.getString("name");
+                                price = innerObj.getString("pirce");
+                                image = innerObj.getString("thumb");
+                                amount = innerObj.getInt("amount");
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), jsonObject.getString("error"),
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("category_id", customID);
+                return map;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(req);
+
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -245,6 +302,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 womenIntent.putExtra("cat_id", womenID);
                 womenIntent.putExtra("name", "Trending Women Styles");
                 startActivity(womenIntent);
+                break;
+
+
+            case R.id.btn_custom_tailoring:
+                Intent intent = new Intent(getApplicationContext(), ProductActivity.class);
+                intent.putExtra("ParentActivityName", "Main");
+                intent.putExtra("product_id", id);
+                intent.putExtra("product_name", name);
+                intent.putExtra("product_price", price);
+                intent.putExtra("amount", amount);
+                intent.putExtra("product_image", image);
+                intent.putExtra("cat_id", customID);
+                intent.putExtra("name", "");
+                intent.putExtra("upload", "1");
+                startActivity(intent);
                 break;
 
                 default:
