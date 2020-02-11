@@ -185,8 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         View view = menu.findItem(R.id.cart).getActionView();
         badge = view.findViewById(R.id.badge);
-        ImageView imageView = view.findViewById(R.id.cart_icon);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
